@@ -30,11 +30,8 @@ public class AnnouncementService {
     private final TagService tagService;
 
     public Announcement create(User user, AnnouncementDto announcementDto) {
-        Announcement announcementEntity = new Announcement();
+        Announcement announcementEntity = mapper.toAnnouncementEntity(announcementDto);
         announcementEntity.setUser(user);
-        announcementEntity.setTitle(announcementDto.getTitle());
-        announcementEntity.setDescription(announcementDto.getDescription());
-        announcementEntity.setBgColor(announcementDto.getBgColor());
         announcementEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return announcementRepository.save(announcementEntity);
     }

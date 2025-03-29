@@ -1,5 +1,6 @@
 package com.studymate.mapper;
 
+import com.studymate.dto.announcement.AnnouncementDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
 import com.studymate.dto.tag.TagResponseDto;
 import com.studymate.entity.Announcement;
@@ -7,12 +8,21 @@ import com.studymate.entity.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
 @Component
 public class MapperUtil {
+
+    public Announcement toAnnouncementEntity(AnnouncementDto announcementDto) {
+        Announcement announcementEntity = new Announcement();
+        announcementEntity.setTitle(announcementDto.getTitle());
+        announcementEntity.setDescription(announcementDto.getDescription());
+        announcementEntity.setBgColor(announcementDto.getBgColor());
+        return announcementEntity;
+    }
 
     public AnnouncementResponseDto toAnnouncementResponseDto(Announcement announcement) {
         AnnouncementResponseDto announcementResponseDto = new AnnouncementResponseDto();
