@@ -27,7 +27,6 @@ public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final FavoriteRepository favoriteRepository;
     private final MapperUtil mapper;
-    private final TagService tagService;
 
     public Announcement create(User user, AnnouncementDto announcementDto) {
         Announcement announcementEntity = mapper.toAnnouncementEntity(announcementDto);
@@ -37,10 +36,22 @@ public class AnnouncementService {
     }
 
     public void addTag(Announcement announcement, String tag) {
-        Tag tagEntity = tagService.getTag(tag);
+        Tag tagEntity = getTag(tag);
         tagEntity.getAnnouncements().add(announcement);
         announcement.getTags().add(tagEntity);
         tagRepository.save(tagEntity);
+    }
+
+    private Tag getTag(String tag) {
+        synchronized (this) {
+            Tag tagEntity = tagRepository.findByName(tag);
+            if (tagEntity == null) {
+                tagEntity = new Tag();
+                tagEntity.setName(tag);
+                tagEntity = tagRepository.save(tagEntity);
+            }
+            return tagEntity;
+        }
     }
 
     public List<AnnouncementResponseDto> getAnnouncements(int page, int pageSize) {
