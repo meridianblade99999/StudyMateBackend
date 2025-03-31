@@ -20,7 +20,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/favorites")
+@RequestMapping("/api/favorites")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;

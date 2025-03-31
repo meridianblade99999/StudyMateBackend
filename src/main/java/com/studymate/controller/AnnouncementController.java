@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/announcement")
+@RequestMapping("/api/announcement")
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;

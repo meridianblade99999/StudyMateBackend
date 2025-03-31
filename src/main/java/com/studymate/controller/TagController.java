@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/tag")
 public class TagController {
 
     private final TagService tagService;

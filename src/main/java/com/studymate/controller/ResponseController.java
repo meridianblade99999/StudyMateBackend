@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/response")
+@RequestMapping("/api/response")
 public class ResponseController {
 
     private final ResponseService responseService;
