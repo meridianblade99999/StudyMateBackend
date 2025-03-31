@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NoPermissionException;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -47,18 +48,34 @@ public class ResponseController {
 
     @GetMapping("/announcement/{announcementId}")
     public ResponseEntity getAllResponseByAnnouncementId(@PathVariable long announcementId) {
-        return ResponseEntity.ok().build();
+        try {
+            return ResponseEntity.ok(responseService.getResponsesByAnnouncementId(announcementId));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity getAllReponseByUserId(@PathVariable long userId) {
-        return ResponseEntity.ok().build();
+        try {
+            return ResponseEntity.ok(responseService.getResponsesByUserId(userId));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Authorized
     @DeleteMapping("/{responseId}")
-    public ResponseEntity deleteResponse(@PathVariable long responseId) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity deleteResponse(@PathVariable long responseId, Authentication authentication) {
+        try {
+            User user = (User) authentication.getPrincipal();
+            responseService.deleteResponse(user, responseId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch(NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch(NoPermissionException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
 }
