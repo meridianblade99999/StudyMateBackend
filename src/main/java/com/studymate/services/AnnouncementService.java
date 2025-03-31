@@ -36,22 +36,10 @@ public class AnnouncementService {
     }
 
     public void addTag(Announcement announcement, String tag) {
-        Tag tagEntity = getTag(tag);
+        Tag tagEntity = tagRepository.getOrCreate(tag, null);
         tagEntity.getAnnouncements().add(announcement);
         announcement.getTags().add(tagEntity);
         tagRepository.save(tagEntity);
-    }
-
-    private Tag getTag(String tag) {
-        synchronized (this) {
-            Tag tagEntity = tagRepository.findByName(tag);
-            if (tagEntity == null) {
-                tagEntity = new Tag();
-                tagEntity.setName(tag);
-                tagEntity = tagRepository.save(tagEntity);
-            }
-            return tagEntity;
-        }
     }
 
     public List<AnnouncementResponseDto> getAnnouncements(int page, int pageSize) {

@@ -31,7 +31,7 @@ public class Tag {
             inverseJoinColumns = @JoinColumn(name = "announce_id"))
     private Set<Announcement> announcements = new HashSet<>();
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "color")

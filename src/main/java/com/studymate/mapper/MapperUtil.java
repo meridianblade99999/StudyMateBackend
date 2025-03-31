@@ -3,6 +3,7 @@ package com.studymate.mapper;
 import com.studymate.dto.announcement.AnnouncementDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
 import com.studymate.dto.response.ResponseDto;
+import com.studymate.dto.tag.TagCreateDto;
 import com.studymate.dto.tag.TagResponseDto;
 import com.studymate.entity.Announcement;
 import com.studymate.entity.Response;
@@ -72,4 +73,12 @@ public class MapperUtil {
         responseDto.setAnnouncementId(response.getAnnouncement().getId());
         return responseDto;
     }
+
+    public Tag toTag(TagCreateDto tagCreateDto) {
+        Tag tag = new Tag();
+        tag.setName(tagCreateDto.getName());
+        tag.setColor(tagCreateDto.getColor());
+        return tag;
+    }
+
 }
