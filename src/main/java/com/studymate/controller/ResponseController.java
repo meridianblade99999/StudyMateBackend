@@ -33,12 +33,16 @@ public class ResponseController {
 
     @GetMapping("")
     public ResponseEntity getAllResponse() {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(responseService.getAllResponses());
     }
 
     @GetMapping("/{responseId}")
     public ResponseEntity getResponse(@PathVariable long responseId) {
-        return ResponseEntity.ok().build();
+        try {
+            return ResponseEntity.ok(responseService.getResponseById(responseId));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @GetMapping("/announcement/{announcementId}")

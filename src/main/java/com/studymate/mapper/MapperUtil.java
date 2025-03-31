@@ -2,8 +2,10 @@ package com.studymate.mapper;
 
 import com.studymate.dto.announcement.AnnouncementDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
+import com.studymate.dto.response.ResponseDto;
 import com.studymate.dto.tag.TagResponseDto;
 import com.studymate.entity.Announcement;
+import com.studymate.entity.Response;
 import com.studymate.entity.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -61,4 +63,13 @@ public class MapperUtil {
         return tagResponseDto;
     }
 
+    public ResponseDto toResponseDto(Response response) {
+        ResponseDto responseDto = new ResponseDto();
+        responseDto.setId(response.getId());
+        responseDto.setDescription(response.getDescription());
+        responseDto.setUserId(response.getUser().getId());
+        responseDto.setUsername(response.getUser().getUsername());
+        responseDto.setAnnouncementId(response.getAnnouncement().getId());
+        return responseDto;
+    }
 }
