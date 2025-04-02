@@ -28,7 +28,7 @@ public class Tag {
     @JoinTable(
             name = "announcement_tag",
             joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "announce_id"))
+            inverseJoinColumns = @JoinColumn(name = "announcement_id"))
     private Set<Announcement> announcements = new HashSet<>();
 
     @Column(name = "name", unique = true)

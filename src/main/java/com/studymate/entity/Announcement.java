@@ -32,13 +32,13 @@ public class Announcement {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "bg_color")
+    @Column(name = "bg_color", length = 25)
     private String bgColor;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "announcements")
     private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)

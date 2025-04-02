@@ -59,7 +59,7 @@ public class AuthenticationController {
         try {
             return authenticationService.refreshToken(request, response);
         } catch(UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 

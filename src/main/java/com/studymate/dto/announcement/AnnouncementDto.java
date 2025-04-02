@@ -13,9 +13,6 @@ public class AnnouncementDto {
     @NotNull
     private String description;
 
-    @JsonProperty("user_id")
-    private Long userId;
-
     @JsonProperty("bg_color")
     @NotNull
     private String bgColor;
