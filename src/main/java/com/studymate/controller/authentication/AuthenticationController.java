@@ -2,6 +2,7 @@ package com.studymate.controller.authentication;
 
 import com.studymate.dto.authentication.AuthenticationResponseDto;
 import com.studymate.dto.authentication.LoginRequestDto;
+import com.studymate.dto.authentication.RefreshTokenRequestDto;
 import com.studymate.dto.authentication.RegistrationRequestDto;
 import com.studymate.services.authentication.AuthenticationService;
 import com.studymate.services.authentication.UserService;
@@ -28,9 +29,7 @@ public class AuthenticationController {
      * @return ответ о результате регистрации
      */
     @PostMapping("/registration")
-    public ResponseEntity register(
-            @RequestBody @Valid RegistrationRequestDto registrationDto
-    ) {
+    public ResponseEntity register(@RequestBody @Valid RegistrationRequestDto registrationDto) {
         try {
             authenticationService.register(registrationDto);
         } catch (Exception e) {
@@ -41,9 +40,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity authenticate(
-            @RequestBody LoginRequestDto request
-    ) {
+    public ResponseEntity authenticate(@RequestBody LoginRequestDto request) {
         try {
             return ResponseEntity.ok(authenticationService.authenticate(request));
         } catch(Exception e) {
@@ -52,12 +49,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+    public ResponseEntity refreshToken(HttpServletRequest request,
+            HttpServletResponse response, @RequestBody @Valid RefreshTokenRequestDto refreshTokenRequestDto) {
         try {
-            return authenticationService.refreshToken(request, response);
+            return authenticationService.refreshToken(request, response, refreshTokenRequestDto.getRefreshToken());
         } catch(UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }

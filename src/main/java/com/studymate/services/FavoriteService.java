@@ -5,9 +5,9 @@ import com.studymate.dto.favorite.FavoriteCreateRequestDto;
 import com.studymate.entity.Announcement;
 import com.studymate.entity.Favorite;
 import com.studymate.entity.authentication.User;
-import com.studymate.mapper.MapperUtil;
 import com.studymate.repository.AnnouncementRepository;
 import com.studymate.repository.FavoriteRepository;
+import com.studymate.util.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class FavoriteService {
 
     public List<AnnouncementResponseDto> getUserFavorites(long userId, int page, int pageSize) {
         List<Announcement> announcementList = announcementRepository.findLikeAnnouncements(userId, PageRequest.of(page, pageSize));
-        return mapper.getAnnouncementResponseDtos(announcementList);
+        return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 
     public void deleteFavorite(User user, long favoriteId) throws NoSuchElementException, NoPermissionException {

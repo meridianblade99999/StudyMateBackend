@@ -9,7 +9,4 @@ public class TagCreateDto {
     @NotNull
     public String name;
 
-    @NotNull
-    private String color;
-
 }

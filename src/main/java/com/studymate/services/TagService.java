@@ -2,19 +2,17 @@ package com.studymate.services;
 
 import com.studymate.dto.tag.TagCreateDto;
 import com.studymate.dto.tag.TagResponseDto;
-import com.studymate.entity.Response;
 import com.studymate.entity.Tag;
 import com.studymate.entity.authentication.User;
-import com.studymate.mapper.MapperUtil;
 import com.studymate.repository.TagRepository;
 import com.studymate.repository.authentication.UserRepository;
+import com.studymate.util.ColourUtil;
+import com.studymate.util.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.naming.NoPermissionException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -24,9 +22,10 @@ public class TagService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
+    private final ColourUtil colourUtil;
 
     public void createTag(TagCreateDto tagCreateDto) {
-        tagRepository.getOrCreate(tagCreateDto.getName(), tagCreateDto.getColor());
+        tagRepository.getOrCreate(tagCreateDto.getName(), colourUtil.createRandomHslColor());
     }
 
     public List<TagResponseDto> getAllTags() {

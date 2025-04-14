@@ -1,6 +1,7 @@
 package com.studymate.services.authentication;
 
 import com.studymate.dto.authentication.AuthenticationResponseDto;
+import com.studymate.dto.authentication.AuthentificationResponseUserDto;
 import com.studymate.dto.authentication.LoginRequestDto;
 import com.studymate.dto.authentication.RegistrationRequestDto;
 import com.studymate.entity.authentication.Token;
@@ -82,13 +83,12 @@ public class AuthenticationService {
         String accessToken = jwtService.generateAccessToken(user); // генерируем токен авторизации
         String refreshToken = jwtService.generateRefreshToken(user); // генерируем токен обновления
 
-
         revokeAllToken(user);
 
         saveUserToken(accessToken, refreshToken, user);
 
         // Возвращение объекта с токеном авторизации
-        return new AuthenticationResponseDto(accessToken, refreshToken);
+        return new AuthenticationResponseDto(accessToken, refreshToken, new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername()));
     }
 
     /**
@@ -147,18 +147,11 @@ public class AuthenticationService {
      */
     public ResponseEntity<AuthenticationResponseDto> refreshToken(
             HttpServletRequest request,
-            HttpServletResponse response) {
+            HttpServletResponse response,
+            String token) {
 
         // Получаем заголовок авторизации
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        // Проверяем наличие и формат токена
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        // Извлекаем токен из заголовка
-        String token = authorizationHeader.substring(7);
 
         // Извлекаем имя пользователя из токена
         long userId = jwtService.extractUserId(token);
@@ -179,7 +172,7 @@ public class AuthenticationService {
             saveUserToken(accessToken, refreshToken, user);
 
             // Возвращаем новый ответ с токенами
-            return new ResponseEntity<>(new AuthenticationResponseDto(accessToken, refreshToken), HttpStatus.OK);
+            return new ResponseEntity<>(new AuthenticationResponseDto(accessToken, refreshToken, new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername())), HttpStatus.OK);
         }
 
         // Возвращаем неавторизованный статус

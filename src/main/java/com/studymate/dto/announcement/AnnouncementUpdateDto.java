@@ -12,4 +12,7 @@ public class AnnouncementUpdateDto {
     @NotNull
     private String description;
 
+    @NotNull
+    private String[] tags;
+
 }

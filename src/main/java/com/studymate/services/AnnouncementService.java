@@ -6,10 +6,11 @@ import com.studymate.dto.announcement.AnnouncementUpdateDto;
 import com.studymate.entity.Announcement;
 import com.studymate.entity.Tag;
 import com.studymate.entity.authentication.User;
-import com.studymate.mapper.MapperUtil;
 import com.studymate.repository.AnnouncementRepository;
 import com.studymate.repository.FavoriteRepository;
 import com.studymate.repository.TagRepository;
+import com.studymate.util.ColourUtil;
+import com.studymate.util.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -27,16 +28,18 @@ public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final FavoriteRepository favoriteRepository;
     private final MapperUtil mapper;
+    private final ColourUtil colourUtil;
 
     public Announcement create(User user, AnnouncementDto announcementDto) {
         Announcement announcementEntity = mapper.toAnnouncementEntity(announcementDto);
+        announcementEntity.setBgColor(colourUtil.createRandomHslColor());
         announcementEntity.setUser(user);
         announcementEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return announcementRepository.save(announcementEntity);
     }
 
     public void addTag(Announcement announcement, String tag) {
-        Tag tagEntity = tagRepository.getOrCreate(tag, null);
+        Tag tagEntity = tagRepository.getOrCreate(tag, colourUtil.createRandomHslColor());
         tagEntity.getAnnouncements().add(announcement);
         announcement.getTags().add(tagEntity);
         tagRepository.save(tagEntity);
@@ -44,20 +47,19 @@ public class AnnouncementService {
 
     public List<AnnouncementResponseDto> getAnnouncements(int page, int pageSize) {
         List<Announcement> announcementList = announcementRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, pageSize));
-        return mapper.getAnnouncementResponseDtos(announcementList);
+        return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 
     public AnnouncementResponseDto getShortAnouncement(long announcementId) throws NoSuchElementException {
         Announcement announcement = announcementRepository.findById(announcementId).orElseThrow();
-        AnnouncementResponseDto responseDto = mapper.toAnnouncementResponseDto(announcement);
-        responseDto.setDescription(null);
+        AnnouncementResponseDto responseDto = mapper.toAnnouncementResponseDto(announcement, false);
         mapper.addTagsToAnnouncementResponse(announcement, responseDto);
         return responseDto;
     }
 
     public AnnouncementResponseDto getFullAnnouncement(long announcementId, User user) throws NoSuchElementException {
         Announcement announcement = announcementRepository.findById(announcementId).orElseThrow();
-        AnnouncementResponseDto responseDto = mapper.toAnnouncementResponseDto(announcement);
+        AnnouncementResponseDto responseDto = mapper.toAnnouncementResponseDto(announcement, true);
         mapper.addTagsToAnnouncementResponse(announcement, responseDto);
         if (user != null) {
             responseDto.setLiked(favoriteRepository.isLiked(user.getId(), announcement.getId()));
@@ -69,7 +71,7 @@ public class AnnouncementService {
 
     public List<AnnouncementResponseDto> getUserAnnouncements(long userId, int page, int pageSize) {
         List<Announcement> announcementList = announcementRepository.findAllByUser_IdOrderByCreatedAtDesc(userId, PageRequest.of(page, pageSize));
-        return mapper.getAnnouncementResponseDtos(announcementList);
+        return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 
     public void updateAnnouncement(User user, long announcementId, AnnouncementUpdateDto updateDto) throws NoSuchElementException, NoPermissionException {
@@ -79,6 +81,13 @@ public class AnnouncementService {
         }
         announcement.setTitle(updateDto.getTitle());
         announcement.setDescription(updateDto.getDescription());
+        for (Tag tag : announcement.getTags()) {
+            tag.getAnnouncements().remove(announcement);
+        }
+        announcement.getTags().clear();
+        for (String tagName : updateDto.getTags()) {
+            announcement.getTags().add(tagRepository.getOrCreate(tagName, colourUtil.createRandomHslColor()));
+        }
         announcementRepository.save(announcement);
     }
 

@@ -3,13 +3,12 @@ package com.studymate.services;
 import com.studymate.dto.response.CreateResponseDto;
 import com.studymate.dto.response.ResponseDto;
 import com.studymate.entity.Announcement;
-import com.studymate.entity.Favorite;
 import com.studymate.entity.Response;
 import com.studymate.entity.authentication.User;
-import com.studymate.mapper.MapperUtil;
 import com.studymate.repository.AnnouncementRepository;
 import com.studymate.repository.ResponseRepository;
 import com.studymate.repository.authentication.UserRepository;
+import com.studymate.util.MapperUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

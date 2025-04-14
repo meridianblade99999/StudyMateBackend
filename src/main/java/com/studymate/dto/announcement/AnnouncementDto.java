@@ -13,8 +13,4 @@ public class AnnouncementDto {
     @NotNull
     private String description;
 
-    @JsonProperty("bg_color")
-    @NotNull
-    private String bgColor;
-
 }

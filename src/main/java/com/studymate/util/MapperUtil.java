@@ -1,4 +1,4 @@
-package com.studymate.mapper;
+package com.studymate.util;
 
 import com.studymate.dto.announcement.AnnouncementDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
@@ -23,25 +23,26 @@ public class MapperUtil {
         Announcement announcementEntity = new Announcement();
         announcementEntity.setTitle(announcementDto.getTitle());
         announcementEntity.setDescription(announcementDto.getDescription());
-        announcementEntity.setBgColor(announcementDto.getBgColor());
         return announcementEntity;
     }
 
-    public AnnouncementResponseDto toAnnouncementResponseDto(Announcement announcement) {
+    public AnnouncementResponseDto toAnnouncementResponseDto(Announcement announcement, boolean withDescription) {
         AnnouncementResponseDto announcementResponseDto = new AnnouncementResponseDto();
         announcementResponseDto.setId(announcement.getId());
         announcementResponseDto.setTitle(announcement.getTitle());
-        announcementResponseDto.setDescription(announcement.getDescription());
+        if (withDescription) {
+            announcementResponseDto.setDescription(announcement.getDescription());
+        }
         announcementResponseDto.setBgColor(announcement.getBgColor());
         announcementResponseDto.setUserId(announcement.getUser().getId());
         announcementResponseDto.setUserName(announcement.getUser().getUsername());
         return announcementResponseDto;
     }
 
-    public List<AnnouncementResponseDto> getAnnouncementResponseDtos(List<Announcement> announcementList) {
+    public List<AnnouncementResponseDto> getAnnouncementResponseDtos(List<Announcement> announcementList, boolean withDescription) {
         List<AnnouncementResponseDto> announcementResponseDtoList = new ArrayList<>(announcementList.size());
         for (Announcement announcement : announcementList) {
-            AnnouncementResponseDto responseDto = toAnnouncementResponseDto(announcement);
+            AnnouncementResponseDto responseDto = toAnnouncementResponseDto(announcement, withDescription);
             announcementResponseDtoList.add(responseDto);
             addTagsToAnnouncementResponse(announcement, responseDto);
         }
@@ -72,13 +73,6 @@ public class MapperUtil {
         responseDto.setUsername(response.getUser().getUsername());
         responseDto.setAnnouncementId(response.getAnnouncement().getId());
         return responseDto;
-    }
-
-    public Tag toTag(TagCreateDto tagCreateDto) {
-        Tag tag = new Tag();
-        tag.setName(tagCreateDto.getName());
-        tag.setColor(tagCreateDto.getColor());
-        return tag;
     }
 
 }
