@@ -43,7 +43,7 @@ public class User implements UserDetails {
     private String location;
 
     @Column(name = "gender")
-    private boolean gender;
+    private Boolean gender;
 
     @Column(name = "birthday")
     private Timestamp birthday;

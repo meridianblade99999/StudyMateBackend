@@ -3,7 +3,7 @@ package com.studymate.config;
 import com.studymate.filter.JwtFilter;
 import com.studymate.handler.CustomAccessDeniedHandler;
 import com.studymate.handler.CustomLogoutHandler;
-import com.studymate.services.authentication.UserService;
+import com.studymate.services.authentication.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFIlter;
 
-    private final UserService userService;
+    private final IUserService userService;
 
     private final CustomAccessDeniedHandler accessDeniedHandler;
 

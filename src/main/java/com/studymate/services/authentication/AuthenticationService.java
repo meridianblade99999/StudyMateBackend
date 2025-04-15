@@ -35,7 +35,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenRepository tokenRepository;
-    private final UserService userService;
+    private final IUserService userService;
 
     /**
      * Регистрация нового пользователя.

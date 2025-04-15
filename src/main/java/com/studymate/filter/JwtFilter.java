@@ -3,7 +3,6 @@ package com.studymate.filter;
 import com.studymate.entity.authentication.User;
 import com.studymate.repository.authentication.UserRepository;
 import com.studymate.services.authentication.JwtService;
-import com.studymate.services.authentication.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

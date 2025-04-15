@@ -5,7 +5,6 @@ import com.studymate.dto.authentication.LoginRequestDto;
 import com.studymate.dto.authentication.RefreshTokenRequestDto;
 import com.studymate.dto.authentication.RegistrationRequestDto;
 import com.studymate.services.authentication.AuthenticationService;
-import com.studymate.services.authentication.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

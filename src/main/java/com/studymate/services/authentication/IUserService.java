@@ -2,7 +2,7 @@ package com.studymate.services.authentication;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService extends UserDetailsService {
+public interface IUserService extends UserDetailsService {
 
     boolean existsByEmail(String email);
 
