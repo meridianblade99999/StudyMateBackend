@@ -7,6 +7,7 @@ import com.studymate.entity.Favorite;
 import com.studymate.entity.Response;
 import com.studymate.entity.authentication.User;
 import com.studymate.services.FavoriteService;
+import com.studymate.util.PageUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,7 @@ import java.util.NoSuchElementException;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    private final PageUtil pageUtil;
 
     @Authorized
     @PostMapping("")
@@ -40,18 +42,17 @@ public class FavoriteController {
     @Authorized
     @GetMapping("/user/{userId}")
     public ResponseEntity getAllByUserId(@PathVariable long userId, Integer page, Integer limit) {
-        if (page == null || page < 1 || limit == null || limit < 1) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        page = pageUtil.validatePageNumber(page);
+        limit = pageUtil.validatePageSize(limit);
         return ResponseEntity.ok().body(favoriteService.getUserFavorites(userId, page-1, limit));
     }
 
     @Authorized
-    @DeleteMapping("/{favoriteId}")
-    public ResponseEntity deleteFavorite(@PathVariable long favoriteId, Authentication authentication) {
+    @DeleteMapping("/{announcementId}")
+    public ResponseEntity deleteFavorite(@PathVariable long announcementId, Authentication authentication) {
         try {
             User user = (User) authentication.getPrincipal();
-            favoriteService.deleteFavorite(user, favoriteId);
+            favoriteService.deleteFavorite(user, announcementId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch(NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

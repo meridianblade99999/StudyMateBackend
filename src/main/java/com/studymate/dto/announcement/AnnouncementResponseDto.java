@@ -22,7 +22,7 @@ public class AnnouncementResponseDto {
     private long userId;
 
     @JsonProperty("user_name")
-    private String userName;
+    private String name;
 
     @JsonInclude(Include.NON_NULL)
     private TagResponseDto tags[];

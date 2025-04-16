@@ -70,7 +70,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // Управление сессиями
                 .addFilterBefore(jwtFIlter, UsernamePasswordAuthenticationFilter.class) // Добавление фильтра JWT перед фильтром UsernamePasswordAuthenticationFilter
                 .logout(log -> {
-                    log.logoutUrl("/api/logout"); // URL для выхода
+                    log.logoutUrl("/api/auth/logout"); // URL для выхода
                     log.addLogoutHandler(customLogoutHandler); // Добавление пользовательского обработчика выхода
                     log.logoutSuccessHandler((request, response, authentication) ->
                             SecurityContextHolder.clearContext()); // Очистка контекста безопасности после успешного выхода

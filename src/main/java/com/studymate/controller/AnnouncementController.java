@@ -7,8 +7,10 @@ import com.studymate.dto.announcement.AnnouncementUpdateDto;
 import com.studymate.entity.Announcement;
 import com.studymate.entity.authentication.User;
 import com.studymate.services.AnnouncementService;
+import com.studymate.util.PageUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ import java.util.NoSuchElementException;
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;
+    private final PageUtil pageUtil;
 
     @Authorized
     @PostMapping("")
@@ -42,12 +45,12 @@ public class AnnouncementController {
     }
 
     @GetMapping("")
-    public ResponseEntity getAllAnnouncements(Integer page, Integer limit) {
-        if (page == null || page < 1 || limit == null || limit < 1) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        List<AnnouncementResponseDto> announcementList = announcementService.getAnnouncements(page-1, limit);
+    public ResponseEntity getAllAnnouncements(Integer page, Integer limit, String tags, Boolean gender,
+                                              @RequestParam(name="min_age", required = false) Integer minAge,
+                                              @RequestParam(name="max_age", required = false) Integer maxAge) {
+        page = pageUtil.validatePageNumber(page);
+        limit = pageUtil.validatePageSize(limit);
+        List<AnnouncementResponseDto> announcementList = announcementService.getAnnouncements(page-1, limit, tags, gender, minAge, maxAge);
         return ResponseEntity.ok(announcementList);
     }
 

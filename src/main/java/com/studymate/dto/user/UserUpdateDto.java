@@ -16,7 +16,6 @@ public class UserUpdateDto {
 
     private Boolean gender;
 
-    @NotNull
     private Timestamp birthday;
 
     @NotNull

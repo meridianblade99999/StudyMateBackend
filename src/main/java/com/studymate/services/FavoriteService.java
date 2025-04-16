@@ -42,8 +42,8 @@ public class FavoriteService {
         return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 
-    public void deleteFavorite(User user, long favoriteId) throws NoSuchElementException, NoPermissionException {
-        Favorite favorite = favoriteRepository.findById(favoriteId).orElseThrow();
+    public void deleteFavorite(User user, long announcementId) throws NoSuchElementException, NoPermissionException {
+        Favorite favorite = favoriteRepository.findByUserIdAndAnnouncementId(user.getId(), announcementId).orElseThrow();
         if (favorite.getUser().getId() != user.getId()) {
             throw new NoPermissionException("Wrong user");
         }

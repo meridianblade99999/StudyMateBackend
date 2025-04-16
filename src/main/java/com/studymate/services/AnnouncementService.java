@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.NoPermissionException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -39,14 +40,25 @@ public class AnnouncementService {
     }
 
     public void addTag(Announcement announcement, String tag) {
-        Tag tagEntity = tagRepository.getOrCreate(tag, colourUtil.createRandomHslColor());
+        Tag tagEntity = tagRepository.getOrCreate(tag);
         tagEntity.getAnnouncements().add(announcement);
         announcement.getTags().add(tagEntity);
         tagRepository.save(tagEntity);
     }
 
-    public List<AnnouncementResponseDto> getAnnouncements(int page, int pageSize) {
-        List<Announcement> announcementList = announcementRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, pageSize));
+    public List<AnnouncementResponseDto> getAnnouncements(int page, int pageSize, String tags, Boolean gender, Integer minAge, Integer maxAge) {
+        List<Long> tagIds = null;
+        if (tags != null) {
+            String[] tagArray = tags.split(";");
+            tagIds = new ArrayList<>(tagArray.length);
+            for (String tag : tagArray) {
+                Tag tagEntity = tagRepository.findByName(tag.toLowerCase());
+                if (tagEntity != null) {
+                    tagIds.add(tagEntity.getId());
+                }
+            }
+        }
+        List<Announcement> announcementList = announcementRepository.findFilterAnnouncements(PageRequest.of(page, pageSize), tags, tagIds, gender, minAge, maxAge);
         return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 
@@ -86,7 +98,7 @@ public class AnnouncementService {
         }
         announcement.getTags().clear();
         for (String tagName : updateDto.getTags()) {
-            announcement.getTags().add(tagRepository.getOrCreate(tagName, colourUtil.createRandomHslColor()));
+            announcement.getTags().add(tagRepository.getOrCreate(tagName));
         }
         announcementRepository.save(announcement);
     }

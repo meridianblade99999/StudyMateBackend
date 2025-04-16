@@ -22,10 +22,9 @@ public class TagService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
-    private final ColourUtil colourUtil;
 
     public void createTag(TagCreateDto tagCreateDto) {
-        tagRepository.getOrCreate(tagCreateDto.getName(), colourUtil.createRandomHslColor());
+        tagRepository.getOrCreate(tagCreateDto.getName());
     }
 
     public List<TagResponseDto> getAllTags() {
