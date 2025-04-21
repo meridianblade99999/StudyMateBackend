@@ -20,14 +20,14 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
     List<Announcement> findLikeAnnouncements(long userId, Pageable pageable);
 
     @Query(value = """
-        select a.* from Announcements a 
-        join Users u on u.id = a.user_id where 
+        select a.* from Announcement a 
+        join User u on u.id = a.user_id where 
         (u.gender = :gender or :gender is null) and
-        (DATE_PART('Year', age(u.birthday)) >= :minAge or :minAge is null) and
-        (DATE_PART('Year', age(u.birthday)) <= :maxAge or :maxAge is null) and
-        (:tags is null or exists(select tag_id from announcement_tag ant where ant.announcement_id=a.id and ant.tag_id in (:tagIds)))
+        (:minAge is null or TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) >= :minAge) and
+        (:maxAge is null or TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) <= :maxAge) and
+        (:findByTags = 0 or exists(select tag_id from announcement_tag ant where ant.announcement_id=a.id and ant.tag_id in (:tagIds)))
         order by a.created_at desc
         """, nativeQuery = true)
-    List<Announcement> findFilterAnnouncements(Pageable pageable, String tags, List<Long> tagIds, Boolean gender, Integer minAge, Integer maxAge);
+    List<Announcement> findFilterAnnouncements(Pageable pageable, boolean findByTags, List<Long> tagIds, Boolean gender, Integer minAge, Integer maxAge);
 
 }

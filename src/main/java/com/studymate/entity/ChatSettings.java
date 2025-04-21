@@ -8,31 +8,24 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "social")
+@Table(name = "chat_setting")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Social {
+public class ChatSettings {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToOne
+    @JoinColumn(name = "chat_user_id")
+    private ChatUser chatUser;
 
-    @Column(name = "ok")
-    private String ok;
+    @Column(name = "muted")
+    private Boolean muted;
 
-    @Column(name = "vk")
-    private String vk;
-
-    @Column(name = "telegram")
-    private String telegram;
-
-    @Column(name = "whatsapp")
-    private String whatsApp;
+    @Column(name = "notifications")
+    private Boolean notifications;
 
 }
-

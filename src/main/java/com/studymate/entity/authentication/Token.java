@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "tokens")
+@Table(name = "token")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Token {

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "favorites")
+@Table(name = "favorite")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Favorite {

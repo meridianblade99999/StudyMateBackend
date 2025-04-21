@@ -49,6 +49,10 @@ public class AuthenticationService {
             throw new Exception("Email already exists");
         }
 
+        if(userService.existsByUsername(request.getUsername())) {
+            throw new Exception("Username already exists");
+        }
+
         User user = new User();
 
         user.setUsername(request.getUsername());

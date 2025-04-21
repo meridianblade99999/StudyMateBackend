@@ -12,7 +12,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "announcements")
+@Table(name = "announcement")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Announcement {
@@ -32,7 +32,7 @@ public class Announcement {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "bg_color", length = 25)
+    @Column(name = "bg_color")
     private String bgColor;
 
     @Column(name = "created_at")

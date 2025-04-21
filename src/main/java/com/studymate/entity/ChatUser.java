@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "social")
+@Table(name = "chat_user")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Social {
+public class ChatUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,17 +22,12 @@ public class Social {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "ok")
-    private String ok;
+    @ManyToOne
+    @JoinColumn(name = "chat_id")
+    private Chat chat;
 
-    @Column(name = "vk")
-    private String vk;
-
-    @Column(name = "telegram")
-    private String telegram;
-
-    @Column(name = "whatsapp")
-    private String whatsApp;
+    @ManyToOne
+    @JoinColumn(name = "chat_settings_id")
+    private ChatSettings chatSettings;
 
 }
-

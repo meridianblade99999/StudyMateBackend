@@ -58,7 +58,7 @@ public class AnnouncementService {
                 }
             }
         }
-        List<Announcement> announcementList = announcementRepository.findFilterAnnouncements(PageRequest.of(page, pageSize), tags, tagIds, gender, minAge, maxAge);
+        List<Announcement> announcementList = announcementRepository.findFilterAnnouncements(PageRequest.of(page, pageSize), tagIds != null, tagIds, gender, minAge, maxAge);
         return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 

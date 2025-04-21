@@ -2,14 +2,15 @@ spring:
   application:
     name: StudyMate
   datasource:
-    url: jdbc:postgresql://localhost:5432/studymate
-    username: postgres
+    url: jdbc:mysql://localhost:3307/studymeet
+    username: studymeet
     password: 12345
-    driverClassName: org.postgresql.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: true
 security:
   jwt:

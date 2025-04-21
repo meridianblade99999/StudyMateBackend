@@ -5,6 +5,7 @@ import com.studymate.util.ColourUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,25 +18,28 @@ public class TagGetOrCreateImpl implements TagGetOrCreate {
     @Autowired
     private ColourUtil colourUtil;
 
+    @Transactional
     @Override
     public Tag getOrCreate(String tag) {
         tag = tag.toLowerCase();
-        String color = colourUtil.createRandomHslColor();
-        Query query = em.createNativeQuery("""
-            WITH new_tag AS (
-              INSERT INTO tags (name, color)
-              VALUES (:name, :color)
-              ON CONFLICT (name) DO NOTHING
-              RETURNING *
-            )
-            SELECT * FROM new_tag
-            UNION\s
-            SELECT * FROM tags
-            WHERE name = :name
-            """, Tag.class);
-        query.setParameter("name", tag);
-        query.setParameter("color", color);
-        return (Tag) query.getSingleResult();
+        Query query = em.createQuery("""
+            select t from Tag t where t.name = :name
+            """, Tag.class)
+                .setParameter("name", tag);
+
+        if (!query.getResultList().isEmpty()) {
+            return (Tag) query.getSingleResult();
+        }
+
+        em.createNativeQuery("""
+            insert into tag (name, color) values (:name, :color)
+            """)
+                .setParameter("name", tag)
+                .setParameter("color", colourUtil.createRandomHslColor()).executeUpdate();
+
+        return em.createQuery("""
+            select t from Tag t where t.name = :name
+            """, Tag.class).setParameter("name", tag).getSingleResult();
     }
 
 }

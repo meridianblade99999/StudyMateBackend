@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "tags")
+@Table(name = "tag")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tag {
@@ -31,7 +31,7 @@ public class Tag {
             inverseJoinColumns = @JoinColumn(name = "announcement_id"))
     private Set<Announcement> announcements = new HashSet<>();
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
     @Column(name = "color")

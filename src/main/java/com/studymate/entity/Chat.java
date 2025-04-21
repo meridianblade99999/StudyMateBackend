@@ -7,31 +7,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "response")
+@Table(name = "chat")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Response {
+public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "announcement_id")
-    private Announcement announcement;
-
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    @Column(name = "name")
+    private String title;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    @Column(name = "deleted_at")
+    private Timestamp deletedAt;
+
+    @OneToMany(mappedBy = "chat")
+    private List<ChatUser> chatUsers = new ArrayList<>();
 }
