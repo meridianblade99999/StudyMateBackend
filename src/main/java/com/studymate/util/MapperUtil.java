@@ -2,13 +2,12 @@ package com.studymate.util;
 
 import com.studymate.dto.announcement.AnnouncementDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
+import com.studymate.dto.chat.*;
 import com.studymate.dto.response.ResponseDto;
 import com.studymate.dto.tag.TagCreateDto;
 import com.studymate.dto.tag.TagResponseDto;
 import com.studymate.dto.user.UserResponseDto;
-import com.studymate.entity.Announcement;
-import com.studymate.entity.Response;
-import com.studymate.entity.Tag;
+import com.studymate.entity.*;
 import com.studymate.entity.authentication.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -92,4 +91,49 @@ public class MapperUtil {
         return userResponseDto;
     }
 
+    public ChatResponseDto toChatResponseDto(Chat chat) {
+        ChatResponseDto chatResponseDto = new ChatResponseDto();
+        chatResponseDto.setId(chat.getId());
+        chatResponseDto.setName(chat.getTitle());
+        return chatResponseDto;
+    }
+
+    public ChatSettingsResponseDto toChatSettingsResponseDto(ChatSettings chatSettings) {
+        ChatSettingsResponseDto chatSettingsResponseDto = new ChatSettingsResponseDto();
+        chatSettingsResponseDto.setId(chatSettings.getId());
+        chatSettingsResponseDto.setMuted(chatSettings.getMuted());
+        chatSettingsResponseDto.setNotifications(chatSettings.getNotifications());
+        return chatSettingsResponseDto;
+    }
+
+    public ChatResponseUserDto toChatResponseUserDto(ChatUser chatUser) {
+        ChatResponseUserDto chatResponseUserDto = new ChatResponseUserDto();
+        chatResponseUserDto.setId(chatUser.getId());
+        chatResponseUserDto.setName(chatUser.getUser().getName());
+        chatResponseUserDto.setUsername(chatUser.getUser().getUsername());
+        return chatResponseUserDto;
+    }
+
+    public ChatLastMessageDto toChatLastMessageDto(Message message) {
+        ChatLastMessageDto chatLastMessageDto = new ChatLastMessageDto();
+        chatLastMessageDto.setId(message.getId());
+        chatLastMessageDto.setUserId(message.getUser().getId());
+        chatLastMessageDto.setUsername(message.getUser().getUsername());
+        chatLastMessageDto.setCreatedAt(message.getCreatedAt());
+        chatLastMessageDto.setContent(message.getContent());
+        return chatLastMessageDto;
+    }
+
+    public ChatMessageResponseDto toChatMessageResponseDto(Message message) {
+        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto();
+        chatMessageResponseDto.setId(message.getId());
+        chatMessageResponseDto.setUserId(message.getUser().getId());
+        chatMessageResponseDto.setUserName(message.getUser().getUsername());
+        chatMessageResponseDto.setChatId(message.getChat().getId());
+        chatMessageResponseDto.setAnsweredMessageId(message.getAnsweredMessage() != null ? message.getAnsweredMessage().getId() : null);
+        chatMessageResponseDto.setCreatedAt(message.getCreatedAt());
+        chatMessageResponseDto.setUpdatedAt(message.getUpdatedAt());
+        chatMessageResponseDto.setContent(message.getContent());
+        return chatMessageResponseDto;
+    }
 }
