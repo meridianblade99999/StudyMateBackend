@@ -26,7 +26,7 @@ public class ChatUser {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "chat_settings_id")
     private ChatSettings chatSettings;
 

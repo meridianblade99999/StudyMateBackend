@@ -1,13 +1,13 @@
 package com.studymate.services;
 
-import com.studymate.dto.chat.ChatMessageResponseDto;
-import com.studymate.dto.chat.ChatResponseDto;
-import com.studymate.dto.chat.ChatResponseUserDto;
+import com.studymate.dto.chat.*;
 import com.studymate.entity.Chat;
+import com.studymate.entity.ChatSettings;
 import com.studymate.entity.ChatUser;
 import com.studymate.entity.Message;
 import com.studymate.entity.authentication.User;
 import com.studymate.repository.ChatRepository;
+import com.studymate.repository.ChatSettingsRepository;
 import com.studymate.repository.ChatUserRepository;
 import com.studymate.repository.MessageRepository;
 import com.studymate.util.MapperUtil;
@@ -29,6 +29,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final ChatUserRepository chatUserRepository;
     private final MessageRepository messageRepository;
+    private final ChatSettingsRepository chatSettingsRepository;
 
     public List<ChatResponseDto> getChatList(User user, int page, int pageSize) {
         List<ChatResponseDto> chats = new ArrayList<>();
@@ -74,5 +75,24 @@ public class ChatService {
         chatResponseDto.setMessages(messagesArray);
 
         return chatResponseDto;
+    }
+
+    public ChatSettingsResponseDto updateChatSettings(User user, long chatId, ChatSettingsRequestDto chatSettingsRequestDto) throws NoSuchElementException {
+        ChatUser chatUser = chatUserRepository.findByChatIdAndUserId(chatId, user.getId()).orElseThrow();
+        ChatSettings chatSettings = chatUser.getChatSettings();
+        if (chatSettings == null) {
+            chatSettings = new ChatSettings();
+            chatUser.setChatSettings(chatSettings);
+            chatSettings.setChatUser(chatUser);
+        }
+        chatSettings.setMuted(chatSettingsRequestDto.getMuted());
+        chatSettings.setNotifications(chatSettingsRequestDto.getNotifications());
+        chatSettingsRepository.save(chatSettings);
+        return mapperUtil.toChatSettingsResponseDto(chatSettings);
+    }
+
+    public void deleteChat(User user, long chatId) throws NoSuchElementException {
+        ChatUser chatUser = chatUserRepository.findByChatIdAndUserId(chatId, user.getId()).orElseThrow();
+        chatUserRepository.delete(chatUser);
     }
 }
