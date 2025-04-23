@@ -2,6 +2,7 @@ package com.studymate.services.authentication;
 
 import com.studymate.entity.authentication.User;
 import com.studymate.repository.authentication.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,15 +11,11 @@ import org.springframework.stereotype.Service;
 /**
  * Сервис для работы с пользователями.
  */
-
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     /**
      * Метод загружает пользователя по его имени.
@@ -34,6 +31,12 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User " + id + " not found"));
     }
 
+    /**
+     * Проверяет, существует ли пользователь с данным email.
+     *
+     * @param email - адрес электронной почты пользователя, который требуется проверить
+     * @return true, если пользователь с данным email существует, в противном случае false
+     */
     @Override
     public boolean existsByEmail(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
@@ -43,6 +46,12 @@ public class UserServiceImpl implements IUserService {
         return false;
     }
 
+    /**
+     * Проверяет, существует ли пользователь с данным именем пользователя.
+     *
+     * @param username - имя пользователя, которое требуется проверить
+     * @return true, если пользователь с данным именем существует, в противном случае false
+     */
     @Override
     public boolean existsByUsername(String username) {
         User user = userRepository.findByUsername(username).orElse(null);

@@ -20,3 +20,6 @@ security:
 logging:
   file:
     name: logs.log
+socket:
+  host: localhost
+  port: 8081

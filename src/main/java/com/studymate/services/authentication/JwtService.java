@@ -51,14 +51,11 @@ public class JwtService {
      * @return true, если токен действителен для пользователя, в противном случае false
      */
     public boolean isValid(String token, User user) {
-        // Извлекаем имя пользователя из токена
         String payload = extractPayload(token);
 
-        // Проверяем, есть ли в базе данных токен с указанным значением
         boolean isValidToken = tokenRepository.findByAccessToken(token)
                 .map(t -> !t.isLoggedOut()).orElse(false);
 
-        // Проверяем, не истек ли токен и совпадает ли имя пользователя
         return payload.equals(new Payload(user.getId(), user.getEmail()).toString())
                 && isAccessTokenExpired(token)
                 && isValidToken;
@@ -72,14 +69,11 @@ public class JwtService {
      * @return true, если токен обновления действителен для пользователя, в противном случае false
      */
     public boolean isValidRefresh(String token, User user) {
-        // Извлекаем имя пользователя из токена
         String payload = extractPayload(token);
 
-        // Проверяем, есть ли в базе данных токен обновления с указанным значением
         boolean isValidRefreshToken = tokenRepository.findByRefreshToken(token)
                 .map(t -> !t.isLoggedOut()).orElse(false);
 
-        // Проверяем, не истек ли токен обновления и совпадает ли имя пользователя
         return payload.equals(new Payload(user.getId(), user.getEmail()).toString())
                 && isAccessTokenExpired(token)
                 && isValidRefreshToken;
@@ -95,6 +89,9 @@ public class JwtService {
         return !extractExpiration(token).before(new Date());
     }
 
+    /**
+     *
+     */
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -110,6 +107,12 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    /**
+     * Извлекает идентификатор пользователя (ID) из токена.
+     *
+     * @param token токен, содержащий информацию о пользователе.
+     * @return идентификатор пользователя (ID), извлечённый из токена. Если обработка токена не удалась, возвращается 0.
+     */
     public long extractUserId(String token) {
         String payloadStr = extractClaim(token, Claims::getSubject);
         ObjectMapper mapper = new ObjectMapper();
@@ -122,6 +125,13 @@ public class JwtService {
         return 0;
     }
 
+    /**
+     * Извлекает определённое утверждение (claim) из предоставленного JWT токена с использованием функции-резолвера.
+     *
+     * @param token JWT токен, из которого извлекается утверждение.
+     * @param resolver Функция, применяемая к утверждениям для извлечения конкретного значения.
+     * @return Значение утверждения, извлечённое и преобразованное функцией-резолвером.
+     */
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
@@ -135,13 +145,10 @@ public class JwtService {
      * @return объект Claims, содержащий все утверждения
      */
     private Claims extractAllClaims(String token) {
-        // Создаем парсер токенов JWT
         JwtParserBuilder parser = Jwts.parser();
 
-        // Добавляем ключ для проверки подписи токена
         parser.verifyWith(getSingKey());
 
-        // Разбираем токен и извлекаем его утверждения
         return parser.build()
                 .parseSignedClaims(token)
                 .getPayload();
@@ -155,7 +162,6 @@ public class JwtService {
      * @return сгенерированный токен JWT
      */
     public String generateAccessToken(User user) {
-        // Создание объекта JwtBuilder для создания токена
         return generateToken(user, accessTokenExpiration);
     }
 
@@ -166,7 +172,6 @@ public class JwtService {
      * @return сгенерированный токен обновления JWT
      */
     public String generateRefreshToken(User user) {
-
         return generateToken(user, refreshTokenExpiration);
     }
 
@@ -179,16 +184,11 @@ public class JwtService {
      */
     private String generateToken(User user, long expiryTime) {
         JwtBuilder builder = Jwts.builder()
-                // Установка субъекта токена (имя пользователя)
                 .subject(new Payload(user.getId(), user.getEmail()).toString())
-                // Установка времени выдачи токена (текущая дата)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                // Установка времени истечения срока действия токена (текущая дата + 10 часов)
                 .expiration(new Date(System.currentTimeMillis() + expiryTime))
-                // Установка ключа для подписи токена
                 .signWith(getSingKey());
 
-        // Создание и возврат токена в виде строки
         return builder.compact();
     }
 
@@ -198,15 +198,18 @@ public class JwtService {
      * @return SecretKey - ключ подписи для JWT
      */
     private SecretKey getSingKey() {
-        // Декодируем ключ из строки в массив байтов
         byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
-
-        // Возвращаем ключ для HmacSHA256
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }
 
+/**
+ * Класс Payload представляет собой модель данных с полями id и email.
+ * Может использоваться для передачи данных между различными компонентами приложения.
+ * Содержит аннотации для автоматической генерации геттеров, сеттеров, конструктора без аргументов и конструктора с аргументами.
+ * Переопределяет метод toString() для представления объекта в виде строки JSON.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

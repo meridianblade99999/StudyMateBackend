@@ -101,17 +101,12 @@ public class AuthenticationService {
      * @param user Пользователь, для которого нужно отменить токены.
      */
     private void revokeAllToken(User user) {
-        // Получаем список всех действительных токенов для данного пользователя
         List<Token> validTokens = tokenRepository.findAllAccessTokenByUser(user.getId());
-
-        // Если список не пустой, то отменяем все токены
         if(!validTokens.isEmpty()){
             validTokens.forEach(t ->{
-                // Устанавливаем признак "отменен" для каждого токена
                 t.setLoggedOut(true);
             });
         }
-        // Сохраняем измененные токены в базе данных
         tokenRepository.saveAll(validTokens);
     }
 
@@ -123,22 +118,13 @@ public class AuthenticationService {
      * @param user Информация о пользователе.
      */
     private void saveUserToken(String accessToken, String refreshToken, User user) {
-        // Создание объекта токена
         Token token = new Token();
 
-        // Установка значения токена
         token.setAccessToken(accessToken);
-
-        // Установка значения токена
         token.setRefreshToken(refreshToken);
-
-        // Установка значения статуса токена
         token.setLoggedOut(false);
-
-        // Установка значения пользователя
         token.setUser(user);
 
-        // Сохранение токена в базе данных
         tokenRepository.save(token);
     }
 
@@ -154,20 +140,14 @@ public class AuthenticationService {
             HttpServletResponse response,
             String token) {
 
-        // Получаем заголовок авторизации
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        // Извлекаем имя пользователя из токена
         long userId = jwtService.extractUserId(token);
 
-        // Находим пользователя по имени
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("No user found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        // Проверяем валидность токена обновления
         if (jwtService.isValidRefresh(token, user)) {
-
-            // Генерируем новый доступный токен и обновляемый токен
             String accessToken = jwtService.generateAccessToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
 
@@ -175,11 +155,9 @@ public class AuthenticationService {
 
             saveUserToken(accessToken, refreshToken, user);
 
-            // Возвращаем новый ответ с токенами
             return new ResponseEntity<>(new AuthenticationResponseDto(accessToken, refreshToken, new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername())), HttpStatus.OK);
         }
 
-        // Возвращаем неавторизованный статус
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 

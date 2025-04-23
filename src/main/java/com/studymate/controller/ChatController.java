@@ -24,7 +24,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @Authorized
-    @GetMapping("")
+    @GetMapping("/user")
     public ResponseEntity getAllChats(Authentication authentication, Integer page, Integer limit) {
         page = pageUtil.validatePageNumber(page);
         limit = pageUtil.validatePageSize(limit);
