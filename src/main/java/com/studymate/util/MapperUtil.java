@@ -1,10 +1,9 @@
 package com.studymate.util;
 
-import com.studymate.dto.announcement.AnnouncementDto;
+import com.studymate.dto.announcement.AnnouncementCreateRequestDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
 import com.studymate.dto.chat.*;
 import com.studymate.dto.response.ResponseDto;
-import com.studymate.dto.tag.TagCreateDto;
 import com.studymate.dto.tag.TagResponseDto;
 import com.studymate.dto.user.UserResponseDto;
 import com.studymate.entity.*;
@@ -12,7 +11,6 @@ import com.studymate.entity.authentication.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,7 @@ import java.util.List;
 @Component
 public class MapperUtil {
 
-    public Announcement toAnnouncementEntity(AnnouncementDto announcementDto) {
+    public Announcement toAnnouncementEntity(AnnouncementCreateRequestDto announcementDto) {
         Announcement announcementEntity = new Announcement();
         announcementEntity.setTitle(announcementDto.getTitle());
         announcementEntity.setDescription(announcementDto.getDescription());

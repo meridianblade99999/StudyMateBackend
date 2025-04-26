@@ -1,6 +1,6 @@
 package com.studymate.services;
 
-import com.studymate.dto.announcement.AnnouncementDto;
+import com.studymate.dto.announcement.AnnouncementCreateRequestDto;
 import com.studymate.dto.announcement.AnnouncementResponseDto;
 import com.studymate.dto.announcement.AnnouncementUpdateDto;
 import com.studymate.entity.Announcement;
@@ -43,7 +43,7 @@ public class AnnouncementService {
      * @param announcementDto объект DTO, содержащий данные объявления
      * @return созданное объявление
      */
-    public Announcement create(User user, AnnouncementDto announcementDto) {
+    public Announcement create(User user, AnnouncementCreateRequestDto announcementDto) {
         Announcement announcementEntity = mapper.toAnnouncementEntity(announcementDto);
         announcementEntity.setBgColor(colourUtil.createRandomHslColor());
         announcementEntity.setUser(user);

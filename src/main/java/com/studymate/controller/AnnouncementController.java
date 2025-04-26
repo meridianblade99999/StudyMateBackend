@@ -32,7 +32,7 @@ public class AnnouncementController {
     @PostMapping("")
     public ResponseEntity create(@RequestBody @Valid AnnouncementCreateRequestDto requestDto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Announcement announcement = announcementService.create(user, requestDto.getAnnouncement());
+        Announcement announcement = announcementService.create(user, requestDto);
         if (announcement == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

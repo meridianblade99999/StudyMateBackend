@@ -7,8 +7,11 @@ import lombok.Getter;
 @Getter
 public class AnnouncementCreateRequestDto {
 
-    @Valid
-    private AnnouncementDto announcement;
+    @NotNull
+    private String title;
+
+    @NotNull
+    private String description;
 
     @NotNull
     private String[] tags;

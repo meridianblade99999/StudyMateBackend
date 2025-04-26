@@ -1,11 +1,9 @@
-package com.studymate.socket;
+package com.studymate.socket.model;
 
 import lombok.Data;
 
 @Data
-public class Message {
-
+public class SocketMessage {
     private String userName;
     private String message;
-
 }
