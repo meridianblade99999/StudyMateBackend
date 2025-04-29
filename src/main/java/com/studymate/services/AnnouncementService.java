@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.naming.NoPermissionException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -160,7 +161,10 @@ public class AnnouncementService {
         }
         announcement.getTags().clear();
         for (String tagName : updateDto.getTags()) {
-            announcement.getTags().add(tagRepository.getOrCreate(tagName));
+            Tag tagEntity = tagRepository.getOrCreate(tagName);
+            announcement.getTags().add(tagEntity);
+            tagEntity.getAnnouncements().add(announcement);
+            tagRepository.save(tagEntity);
         }
         announcementRepository.save(announcement);
     }
@@ -179,5 +183,19 @@ public class AnnouncementService {
             throw new NoPermissionException("Wrong user");
         }
         announcementRepository.delete(announcement);
+    }
+
+    public List<AnnouncementResponseDto> searchAnnouncement(String title, String username, String tag) {
+        if (title != null) {
+            return mapper.getAnnouncementResponseDtos(announcementRepository.findByTitle(title), false);
+        } else if (username != null) {
+            return mapper.getAnnouncementResponseDtos(announcementRepository.findByUsername(username), false);
+        } else if (tag != null) {
+            Tag tagEntity = tagRepository.findByName(tag.toLowerCase());
+            if (tagEntity != null) {
+                return mapper.getAnnouncementResponseDtos(announcementRepository.findByTag(tagEntity.getId()), false);
+            }
+        }
+        return Collections.emptyList();
     }
 }

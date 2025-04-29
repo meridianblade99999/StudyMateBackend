@@ -30,4 +30,23 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
         """, nativeQuery = true)
     List<Announcement> findFilterAnnouncements(Pageable pageable, boolean findByTags, List<Long> tagIds, Boolean gender, Integer minAge, Integer maxAge);
 
+    @Query("""
+        select a from Announcement a
+        where a.title like %:title% 
+        order by a.id desc
+        """)
+    List<Announcement> findByTitle(String title);
+
+    @Query("""
+        select a from Announcement a
+        where exists(select 1 from User u where u=a.user and u.username like %:username%)
+        order by a.id desc
+        """)
+    List<Announcement> findByUsername(String username);
+
+    @Query(value = """
+        select a.* from Announcement a
+        where exists(select 1 from announcement_tag at where at.announcement_id=a.id and at.tag_id=:tagId)
+        """, nativeQuery = true)
+    List<Announcement> findByTag(long tagId);
 }
