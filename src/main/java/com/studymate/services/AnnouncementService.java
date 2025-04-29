@@ -185,6 +185,14 @@ public class AnnouncementService {
         announcementRepository.delete(announcement);
     }
 
+    /**
+     * Метод выполняет поиск объявлений по указанным параметрам.
+     *
+     * @param title заголовок объявления, используется для поиска объявлений с совпадающим заголовком; если null, поиск по заголовку не выполняется
+     * @param username имя пользователя, используется для поиска объявлений, созданных указанным пользователем; если null, поиск по пользователю не выполняется
+     * @param tag тег, используется для поиска объявлений, связанных с указанным тегом; если null, поиск по тегу не выполняется
+     * @return список объектов AnnouncementResponseDto, соответствующих критериям поиска; если ничего не найдено, возвращается пустой список
+     */
     public List<AnnouncementResponseDto> searchAnnouncement(String title, String username, String tag) {
         if (title != null) {
             return mapper.getAnnouncementResponseDtos(announcementRepository.findByTitle(title), false);

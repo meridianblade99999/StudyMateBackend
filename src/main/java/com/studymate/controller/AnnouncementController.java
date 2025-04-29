@@ -115,11 +115,7 @@ public class AnnouncementController {
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(required = false) String title, @RequestParam(required = false) String username,
                                  @RequestParam(required = false) String tag) {
-        try {
-            return ResponseEntity.ok(announcementService.searchAnnouncement(title, username, tag));
-        } catch(NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.ok(announcementService.searchAnnouncement(title, username, tag));
     }
 
 }
