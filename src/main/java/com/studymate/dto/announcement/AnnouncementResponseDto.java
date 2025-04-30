@@ -21,7 +21,7 @@ public class AnnouncementResponseDto {
     @JsonProperty("user_id")
     private long userId;
 
-    @JsonProperty("user_name")
+    @JsonProperty("name")
     private String name;
 
     @JsonInclude(Include.NON_NULL)

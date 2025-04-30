@@ -15,7 +15,7 @@ public class ResponseDto {
     @JsonProperty("user_id")
     private Long userId;
 
-    @JsonProperty("user_name")
+    @JsonProperty("name")
     private String name;
 
     private String description;
