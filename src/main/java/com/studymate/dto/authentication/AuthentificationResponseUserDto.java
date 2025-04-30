@@ -10,6 +10,8 @@ public class AuthentificationResponseUserDto {
 
     private long id;
     private String name;
+
+    @JsonProperty("user_name")
     private String username;
 
 }
