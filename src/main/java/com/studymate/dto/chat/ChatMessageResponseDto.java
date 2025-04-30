@@ -16,7 +16,7 @@ public class ChatMessageResponseDto {
     @JsonProperty("user_id")
     private Long userId;
 
-    @JsonProperty("user_name")
+    @JsonProperty("username")
     private String userName;
 
     @JsonProperty("chat_id")
