@@ -40,11 +40,11 @@ public class FavoriteController {
     }
 
     @Authorized
-    @GetMapping("/user/{userId}")
-    public ResponseEntity getAllByUserId(@PathVariable long userId, Integer page, Integer limit) {
+    @GetMapping("/user")
+    public ResponseEntity getAllByUserId(@PathVariable long userId, Authentication authentication, Integer page, Integer limit) {
         page = pageUtil.validatePageNumber(page);
         limit = pageUtil.validatePageSize(limit);
-        return ResponseEntity.ok().body(favoriteService.getUserFavorites(userId, page-1, limit));
+        return ResponseEntity.ok().body(favoriteService.getUserFavorites((User) authentication.getPrincipal(), page-1, limit));
     }
 
     @Authorized

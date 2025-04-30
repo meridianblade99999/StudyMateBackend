@@ -60,8 +60,8 @@ public class FavoriteService {
      * @param pageSize количество записей на одну страницу
      * @return список объектов AnnouncementResponseDto, содержащих данные об избранных объявлениях
      */
-    public List<AnnouncementResponseDto> getUserFavorites(long userId, int page, int pageSize) {
-        List<Announcement> announcementList = announcementRepository.findLikeAnnouncements(userId, PageRequest.of(page, pageSize));
+    public List<AnnouncementResponseDto> getUserFavorites(User user, int page, int pageSize) {
+        List<Announcement> announcementList = announcementRepository.findLikeAnnouncements(user.getId(), PageRequest.of(page, pageSize));
         return mapper.getAnnouncementResponseDtos(announcementList, false);
     }
 
