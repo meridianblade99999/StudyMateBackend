@@ -15,7 +15,7 @@ public class ChatLastMessageDto {
     @JsonProperty("user_id")
     private Long userId;
 
-    @JsonProperty("user_name")
+    @JsonProperty("username")
     private String username;
 
     private String content;

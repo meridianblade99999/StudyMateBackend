@@ -114,8 +114,10 @@ public class AnnouncementController {
 
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(required = false) String title, @RequestParam(required = false) String username,
-                                 @RequestParam(required = false) String tag) {
-        return ResponseEntity.ok(announcementService.searchAnnouncement(title, username, tag));
+                                 @RequestParam(required = false) String tag, Integer page, Integer limit) {
+        page = pageUtil.validatePageNumber(page);
+        limit = pageUtil.validatePageSize(limit);
+        return ResponseEntity.ok(announcementService.searchAnnouncement(page-1, limit, title, username, tag));
     }
 
 }
