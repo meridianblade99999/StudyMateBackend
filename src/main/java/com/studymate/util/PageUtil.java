@@ -9,7 +9,7 @@ public class PageUtil {
         if (pageNumber == null || pageNumber < 1) {
             return 1;
         }
-        return pageNumber;
+        return pageNumber - 1;
     }
 
     public int validatePageSize(Integer pageSize) {

@@ -1,20 +1,18 @@
 package com.studymate.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
-@Getter
-@Setter
-public class CreateResponseDto {
+@Data
+public class CreateResponseRequestDto {
 
     @JsonProperty("description")
+    @NotNull
     private String description;
 
     @JsonProperty("announcement_id")
+    @NotNull
     private Long announcementId;
-
-    @JsonProperty("user_id")
-    private Long userId;
 
 }

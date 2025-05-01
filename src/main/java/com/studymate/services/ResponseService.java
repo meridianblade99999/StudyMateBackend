@@ -1,6 +1,7 @@
 package com.studymate.services;
 
 import com.studymate.dto.response.CreateResponseDto;
+import com.studymate.dto.response.CreateResponseRequestDto;
 import com.studymate.dto.response.ResponseDto;
 import com.studymate.entity.Announcement;
 import com.studymate.entity.Response;
@@ -35,22 +36,28 @@ public class ResponseService {
     private final MapperUtil mapperUtil;
 
     /**
-     * Создает новый отклик на объявление на основе переданных данных.
+     * Создает новый отклик на объявление и сохраняет его в базе данных.
      *
-     * @param user пользователь, создающий отклик
-     * @param createResponseDto объект, содержащий информацию для создания отклика,
-     *                          включая идентификатор объявления и описание отклика
-     * @throws NoSuchElementException если объявление с указанным идентификатором не найдено
+     * @param user объект пользователя, создающего отклик
+     * @param createResponseRequestDto объект запроса с данными для создания отклика, включая ID объявления и описание
+     * @return объект CreateResponseDto с информацией о созданном отклике, включая ID объявления, описание и ID пользователя
+     * @throws NoSuchElementException если объявление с указанным ID не найдено
      */
-    public void createResponse(User user, CreateResponseDto createResponseDto) throws NoSuchElementException {
-        Announcement announcement = announcementRepository.findById(createResponseDto.getAnnouncementId()).orElseThrow();
+    public CreateResponseDto createResponse(User user, CreateResponseRequestDto createResponseRequestDto) throws NoSuchElementException {
+        Announcement announcement = announcementRepository.findById(createResponseRequestDto.getAnnouncementId()).orElseThrow();
+
         Response response = new Response();
-        response.setDescription(createResponseDto.getDescription());
+        response.setDescription(createResponseRequestDto.getDescription());
         response.setAnnouncement(announcement);
         response.setUser(user);
         response.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         response = responseRepository.save(response);
-        createResponseDto.setUserId(user.getId());
+
+        CreateResponseDto responseDto = new CreateResponseDto();
+        responseDto.setAnnouncementId(createResponseRequestDto.getAnnouncementId());
+        responseDto.setDescription(createResponseRequestDto.getDescription());
+        responseDto.setUserId(user.getId());
+        return responseDto;
     }
 
     /**

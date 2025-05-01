@@ -74,11 +74,8 @@ public class FavoriteService {
      * @throws NoSuchElementException если запись в избранном с указанными параметрами не найдена
      * @throws NoPermissionException если пользователь не имеет прав на удаление этой записи
      */
-    public void deleteFavorite(User user, long announcementId) throws NoSuchElementException, NoPermissionException {
+    public void deleteFavorite(User user, long announcementId) throws NoSuchElementException {
         Favorite favorite = favoriteRepository.findByUserIdAndAnnouncementId(user.getId(), announcementId).orElseThrow();
-        if (favorite.getUser().getId() != user.getId()) {
-            throw new NoPermissionException("Wrong user");
-        }
         favoriteRepository.delete(favorite);
     }
 

@@ -92,7 +92,8 @@ public class AuthenticationService {
         saveUserToken(accessToken, refreshToken, user);
 
         // Возвращение объекта с токеном авторизации
-        return new AuthenticationResponseDto(accessToken, refreshToken, new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername()));
+        return new AuthenticationResponseDto(accessToken,
+            refreshToken, new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername()));
     }
 
     /**
@@ -155,7 +156,11 @@ public class AuthenticationService {
 
             saveUserToken(accessToken, refreshToken, user);
 
-            return new ResponseEntity<>(new AuthenticationResponseDto(accessToken, refreshToken, new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername())), HttpStatus.OK);
+            return new ResponseEntity<>(new AuthenticationResponseDto(
+                accessToken, refreshToken,
+                new AuthentificationResponseUserDto(user.getId(), user.getName(), user.getUsername())),
+                HttpStatus.OK
+            );
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
