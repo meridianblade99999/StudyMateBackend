@@ -52,28 +52,22 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http.csrf(AbstractHttpConfigurer::disable);// Отключаем защиту от CSRF
-
-        // Настраиваем авторизацию запросов
+        http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> {
-                    //auth.requestMatchers("/auth/**", "/**")
-                    //        .permitAll(); // Разрешаем все запросы к этим URL
-                    //auth.requestMatchers("/admin/**").hasAuthority("ADMIN"); // Разрешаем запросы только для администратора
-                    //auth.anyRequest().authenticated(); // Требуем аутентификацию для всех остальных запросов
+                    auth.requestMatchers("api/admin/**").hasAuthority("ADMIN");
                     auth.anyRequest().permitAll();
                 }).userDetailsService(userService)
                 .exceptionHandling(e -> {
-                    e.accessDeniedHandler(accessDeniedHandler); // Обработчик отказа доступа
-                    e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)); // Входная точка аутентификации
+                    e.accessDeniedHandler(accessDeniedHandler);
+                    e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
                 })
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // Управление сессиями
-                .addFilterBefore(jwtFIlter, UsernamePasswordAuthenticationFilter.class) // Добавление фильтра JWT перед фильтром UsernamePasswordAuthenticationFilter
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .addFilterBefore(jwtFIlter, UsernamePasswordAuthenticationFilter.class)
                 .logout(log -> {
-                    log.logoutUrl("/api/auth/logout"); // URL для выхода
-                    log.addLogoutHandler(customLogoutHandler); // Добавление пользовательского обработчика выхода
+                    log.logoutUrl("/api/auth/logout");
+                    log.addLogoutHandler(customLogoutHandler);
                     log.logoutSuccessHandler((request, response, authentication) ->
-                            SecurityContextHolder.clearContext()); // Очистка контекста безопасности после успешного выхода
+                            SecurityContextHolder.clearContext());
                 });
 
         return http.build();
