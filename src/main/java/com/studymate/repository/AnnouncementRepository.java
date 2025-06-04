@@ -32,7 +32,7 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
 
     @Query("""
         select a from Announcement a
-        where a.title like %:title% 
+        where a.title = :title 
         order by a.id desc
         """)
     List<Announcement> findByTitle(Pageable pageable,String title);
@@ -49,4 +49,11 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
         where exists(select 1 from announcement_tag at where at.announcement_id=a.id and at.tag_id=:tagId)
         """, nativeQuery = true)
     List<Announcement> findByTag(Pageable pageable, long tagId);
+
+    @Query("""
+        select a.title from Announcement a
+        where lower(a.title) like %:title%
+        order by a.id desc
+        """)
+    List<String> findTitles(Pageable pageable, String title);
 }

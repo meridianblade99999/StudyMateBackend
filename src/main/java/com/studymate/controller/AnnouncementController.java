@@ -247,33 +247,4 @@ public class AnnouncementController {
         }
     }
 
-    @Operation(
-        summary = "Поиск объявлений",
-        description = "Ищет объявление по одному из заданных параметров. " +
-            "Используется только один из параметров в порядке убывания: " +
-            "title, username, tag"
-    )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Возвращает список найденных объявлений",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation =
-                    AnnouncementResponseDto.class)
-            )
-        )
-    })
-    @GetMapping("/search")
-    public ResponseEntity<List<AnnouncementResponseDto>> search(
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String username,
-        @RequestParam(required = false) String tag,
-        Integer page, Integer limit
-    ) {
-        page = pageUtil.validatePageNumber(page);
-        limit = pageUtil.validatePageSize(limit);
-        return ResponseEntity.ok(announcementService.searchAnnouncement(page, limit, title, username, tag));
-    }
-
 }

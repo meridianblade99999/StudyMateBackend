@@ -120,7 +120,6 @@ public class JwtService {
             Payload payload = mapper.readValue(payloadStr, Payload.class);
             return payload.getId();
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
         }
         return 0;
     }

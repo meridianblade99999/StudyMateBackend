@@ -24,6 +24,9 @@ public class AnnouncementResponseDto {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("user_name")
+    private String username;
+
     @JsonInclude(Include.NON_NULL)
     private TagResponseDto tags[];
 
