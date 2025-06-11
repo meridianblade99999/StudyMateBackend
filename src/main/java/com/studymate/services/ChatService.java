@@ -137,4 +137,5 @@ public class ChatService {
         ChatUser chatUser = chatUserRepository.findByChatIdAndUserId(chatId, user.getId()).orElseThrow();
         chatUserRepository.delete(chatUser);
     }
+
 }

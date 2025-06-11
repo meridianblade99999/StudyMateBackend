@@ -18,12 +18,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import javax.naming.NoPermissionException;
 import java.util.List;
@@ -248,35 +245,6 @@ public class AnnouncementController {
         } catch (NoPermissionException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-    }
-
-    @Operation(
-        summary = "Поиск объявлений",
-        description = "Ищет объявление по одному из заданных параметров. " +
-            "Используется только один из параметров в порядке убывания: " +
-            "title, username, tag"
-    )
-    @ApiResponses({
-        @ApiResponse(
-            responseCode = "200",
-            description = "Возвращает список найденных объявлений",
-            content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation =
-                    AnnouncementResponseDto.class)
-            )
-        )
-    })
-    @GetMapping("/search")
-    public ResponseEntity<List<AnnouncementResponseDto>> search(
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String username,
-        @RequestParam(required = false) String tag,
-        Integer page, Integer limit
-    ) {
-        page = pageUtil.validatePageNumber(page);
-        limit = pageUtil.validatePageSize(limit);
-        return ResponseEntity.ok(announcementService.searchAnnouncement(page, limit, title, username, tag));
     }
 
 }

@@ -81,8 +81,7 @@ public class FavoriteController {
     })
     @Authorized
     @GetMapping("/user")
-    public ResponseEntity<List<AnnouncementResponseDto>> getAllByUserId(
-        @PathVariable long userId,
+    public ResponseEntity<List<AnnouncementResponseDto>> getAllByUser(
         @AuthenticationPrincipal User user,
         Integer page, Integer limit
     ) {

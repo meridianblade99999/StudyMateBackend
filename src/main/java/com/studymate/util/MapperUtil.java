@@ -35,6 +35,7 @@ public class MapperUtil {
         announcementResponseDto.setBgColor(announcement.getBgColor());
         announcementResponseDto.setUserId(announcement.getUser().getId());
         announcementResponseDto.setName(announcement.getUser().getName());
+        announcementResponseDto.setUsername(announcement.getUser().getUsername());
         return announcementResponseDto;
     }
 

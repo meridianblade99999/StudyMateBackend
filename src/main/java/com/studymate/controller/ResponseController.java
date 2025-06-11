@@ -35,8 +35,8 @@ public class ResponseController {
     private final ResponseService responseService;
 
     @SecurityRequirement(name = "JWT")
-    @Operation(summary = "Добавление избранного объявления", description = "Добавляет объявление в избранные " +
-        "для авторизованного пользователя.")
+    @Operation(summary = "Добавление отклика на объявление", description = "Создает отклик " +
+        "на объявление.")
     @ApiResponses({
         @ApiResponse(
             responseCode = "201",
