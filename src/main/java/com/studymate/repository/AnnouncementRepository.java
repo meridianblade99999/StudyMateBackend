@@ -51,9 +51,9 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
     List<Announcement> findByTag(Pageable pageable, long tagId);
 
     @Query("""
-        select a.title from Announcement a
+        select distinct a.title from Announcement a
         where lower(a.title) like %:title%
-        order by a.id desc
+        order by a.title asc
         """)
     List<String> findTitles(Pageable pageable, String title);
 }
